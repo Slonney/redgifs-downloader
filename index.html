@@ -62,7 +62,6 @@
             max-width: 560px;
         }
 
-        /* HEADER */
         .header {
             margin-bottom: 3rem;
             opacity: 0;
@@ -71,7 +70,6 @@
 
         .logo-tag {
             display: inline-block;
-            font-family: 'DM Sans', sans-serif;
             font-size: 0.65rem;
             font-weight: 500;
             letter-spacing: 0.25em;
@@ -88,7 +86,6 @@
             font-size: clamp(3.5rem, 12vw, 6rem);
             letter-spacing: 0.02em;
             line-height: 1;
-            color: var(--text);
         }
 
         .logo-main span {
@@ -99,8 +96,7 @@
         .logo-main span::after {
             content: '';
             position: absolute;
-            bottom: 4px;
-            left: 0; right: 0;
+            bottom: 4px; left: 0; right: 0;
             height: 3px;
             background: var(--red);
             border-radius: 2px;
@@ -119,13 +115,10 @@
         }
 
         .tagline::before, .tagline::after {
-            content: '';
-            flex: 1;
-            height: 1px;
-            background: var(--border);
+            content: ''; flex: 1;
+            height: 1px; background: var(--border);
         }
 
-        /* CARD */
         .card {
             background: var(--surface);
             border: 1px solid var(--border);
@@ -140,8 +133,7 @@
         .card::before {
             content: '';
             position: absolute;
-            top: 0; left: 0; right: 0;
-            height: 1px;
+            top: 0; left: 0; right: 0; height: 1px;
             background: linear-gradient(90deg, transparent, rgba(255,32,32,0.4), transparent);
         }
 
@@ -153,16 +145,13 @@
         }
 
         .card .scan {
-            position: absolute;
-            left: 0; right: 0;
-            height: 1px;
+            position: absolute; left: 0; right: 0; height: 1px;
             background: linear-gradient(90deg, transparent, rgba(255,32,32,0.5), transparent);
             pointer-events: none;
             animation: scanline 3.5s ease-in-out infinite;
             animation-delay: 1.2s;
         }
 
-        /* INPUT GROUP */
         .input-group {
             display: flex;
             align-items: center;
@@ -177,61 +166,39 @@
 
         .input-group:focus-within {
             border-color: rgba(255,32,32,0.4);
-            box-shadow: 0 0 0 3px rgba(255,32,32,0.07), inset 0 0 20px rgba(255,32,32,0.03);
+            box-shadow: 0 0 0 3px rgba(255,32,32,0.07);
         }
 
-        .input-icon { color: var(--muted); font-size: 0.85rem; flex-shrink: 0; }
+        .input-icon { color: var(--muted); flex-shrink: 0; }
 
         .url-input {
-            flex: 1;
-            background: transparent;
-            border: none;
-            outline: none;
-            color: var(--text);
-            font-family: 'DM Sans', sans-serif;
-            font-size: 0.95rem;
-            padding: 1rem 0;
+            flex: 1; background: transparent; border: none; outline: none;
+            color: var(--text); font-family: 'DM Sans', sans-serif;
+            font-size: 0.95rem; padding: 1rem 0;
         }
 
         .url-input::placeholder { color: var(--muted); }
 
         .clear-btn {
-            background: none;
-            border: none;
-            color: var(--muted);
-            cursor: pointer;
-            padding: 4px;
-            display: none;
-            transition: color 0.15s;
+            background: none; border: none; color: var(--muted);
+            cursor: pointer; padding: 4px; display: none; transition: color 0.15s;
         }
         .clear-btn:hover { color: var(--text); }
         .clear-btn.visible { display: block; }
 
-        /* DOWNLOAD BUTTON */
         .dl-btn {
-            width: 100%;
-            background: var(--red);
-            color: #fff;
-            border: none;
-            border-radius: 12px;
-            padding: 1rem;
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 1.4rem;
-            letter-spacing: 0.08em;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.6rem;
+            width: 100%; background: var(--red); color: #fff; border: none;
+            border-radius: 12px; padding: 1rem;
+            font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem;
+            letter-spacing: 0.08em; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; gap: 0.6rem;
             transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
-            position: relative;
-            overflow: hidden;
+            position: relative; overflow: hidden;
         }
 
         .dl-btn::before {
             content: '';
-            position: absolute;
-            inset: 0;
+            position: absolute; inset: 0;
             background: linear-gradient(180deg, rgba(255,255,255,0.1) 0%, transparent 100%);
             pointer-events: none;
         }
@@ -248,7 +215,6 @@
         @keyframes spin { to { transform: rotate(360deg); } }
         .spin { animation: spin 0.8s linear infinite; display: inline-block; }
 
-        /* RESULT */
         #resultado { margin-top: 1rem; }
 
         .result-card {
@@ -257,218 +223,137 @@
             border-radius: 20px;
             padding: 1.5rem;
             animation: slideUp 0.5s cubic-bezier(0.16,1,0.3,1) forwards;
-            position: relative;
-            overflow: hidden;
+            position: relative; overflow: hidden;
         }
 
         .result-card.success::before {
             content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0;
-            height: 1px;
+            position: absolute; top: 0; left: 0; right: 0; height: 1px;
             background: linear-gradient(90deg, transparent, rgba(0,232,122,0.5), transparent);
         }
 
         .result-card.error::before {
             content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0;
-            height: 1px;
+            position: absolute; top: 0; left: 0; right: 0; height: 1px;
             background: linear-gradient(90deg, transparent, rgba(255,32,32,0.5), transparent);
         }
 
         .badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.4rem;
-            font-size: 0.72rem;
-            font-weight: 500;
-            letter-spacing: 0.06em;
-            text-transform: uppercase;
-            padding: 4px 10px;
-            border-radius: 6px;
+            display: inline-flex; align-items: center; gap: 0.4rem;
+            font-size: 0.72rem; font-weight: 500; letter-spacing: 0.06em;
+            text-transform: uppercase; padding: 4px 10px; border-radius: 6px;
             margin-bottom: 1.25rem;
         }
 
-        .badge.success {
-            background: rgba(0,232,122,0.1);
-            color: var(--green);
-            border: 1px solid rgba(0,232,122,0.2);
-        }
-
-        .badge.error {
-            background: rgba(255,32,32,0.1);
-            color: var(--red);
-            border: 1px solid rgba(255,32,32,0.2);
-        }
+        .badge.success { background: rgba(0,232,122,0.1); color: var(--green); border: 1px solid rgba(0,232,122,0.2); }
+        .badge.error   { background: rgba(255,32,32,0.1);  color: var(--red);   border: 1px solid rgba(255,32,32,0.2); }
 
         .link-box {
-            background: var(--surface2);
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            padding: 0.75rem 1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            margin-bottom: 1rem;
+            background: var(--surface2); border: 1px solid var(--border);
+            border-radius: 10px; padding: 0.75rem 1rem;
+            display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem;
         }
 
         .link-url {
-            flex: 1;
-            font-size: 0.72rem;
-            color: var(--green);
+            flex: 1; font-size: 0.72rem; color: var(--green);
             font-family: 'Courier New', monospace;
-            word-break: break-all;
-            line-height: 1.5;
-            opacity: 0.85;
+            word-break: break-all; line-height: 1.5; opacity: 0.85;
         }
 
         .copy-btn {
-            background: none;
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            color: var(--muted);
-            cursor: pointer;
-            padding: 5px 10px;
-            font-size: 0.78rem;
-            font-family: 'DM Sans', sans-serif;
-            transition: all 0.15s;
-            flex-shrink: 0;
-            white-space: nowrap;
+            background: none; border: 1px solid var(--border); border-radius: 6px;
+            color: var(--muted); cursor: pointer; padding: 5px 10px;
+            font-size: 0.78rem; font-family: 'DM Sans', sans-serif;
+            transition: all 0.15s; flex-shrink: 0; white-space: nowrap;
         }
         .copy-btn:hover { color: var(--text); border-color: rgba(255,255,255,0.2); }
         .copy-btn.copied { color: var(--green); border-color: rgba(0,232,122,0.3); }
 
-        .quality-row {
-            display: flex;
-            gap: 0.5rem;
-            margin-bottom: 0.75rem;
-        }
+        .quality-row { display: flex; gap: 0.5rem; margin-bottom: 0.75rem; }
 
         .q-btn {
-            flex: 1;
-            padding: 0.6rem;
-            border-radius: 8px;
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 1rem;
-            letter-spacing: 0.05em;
-            cursor: pointer;
-            text-align: center;
-            text-decoration: none;
-            border: 1px solid;
-            transition: all 0.15s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.3rem;
+            flex: 1; padding: 0.6rem; border-radius: 8px;
+            font-family: 'Bebas Neue', sans-serif; font-size: 1rem;
+            letter-spacing: 0.05em; cursor: pointer; text-align: center;
+            text-decoration: none; border: 1px solid; transition: all 0.15s;
+            display: flex; align-items: center; justify-content: center; gap: 0.3rem;
         }
 
-        .q-btn.hd  { background: rgba(0,232,122,0.08);   color: var(--green);  border-color: rgba(0,232,122,0.25); }
-        .q-btn.hd:hover  { background: rgba(0,232,122,0.15);  box-shadow: 0 4px 16px rgba(0,232,122,0.12); }
-        .q-btn.sd  { background: rgba(100,160,255,0.08); color: #6aaeff;       border-color: rgba(100,160,255,0.25); }
+        .q-btn.hd  { background: rgba(0,232,122,0.08);   color: var(--green); border-color: rgba(0,232,122,0.25); }
+        .q-btn.hd:hover  { background: rgba(0,232,122,0.15); box-shadow: 0 4px 16px rgba(0,232,122,0.12); }
+        .q-btn.sd  { background: rgba(100,160,255,0.08); color: #6aaeff;      border-color: rgba(100,160,255,0.25); }
         .q-btn.sd:hover  { background: rgba(100,160,255,0.15); }
-        .q-btn.gif { background: rgba(200,120,255,0.08); color: #c87aff;       border-color: rgba(200,120,255,0.25); }
+        .q-btn.gif { background: rgba(200,120,255,0.08); color: #c87aff;      border-color: rgba(200,120,255,0.25); }
         .q-btn.gif:hover { background: rgba(200,120,255,0.15); }
 
         .divider { height: 1px; background: var(--border); margin: 0.75rem 0; }
 
+        /* Progress bar */
+        .progress-wrap {
+            background: var(--surface2); border-radius: 8px;
+            overflow: hidden; margin-bottom: 0.75rem; height: 6px;
+        }
+
+        .progress-bar {
+            height: 100%; width: 0%;
+            background: linear-gradient(90deg, var(--green), #00ff99);
+            border-radius: 8px;
+            transition: width 0.3s ease;
+        }
+
+        .progress-label {
+            font-size: 0.75rem; color: var(--muted);
+            margin-bottom: 0.5rem; display: flex;
+            justify-content: space-between;
+        }
+
         .main-dl {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.6rem;
-            width: 100%;
-            padding: 0.9rem;
-            background: var(--green);
-            color: #000;
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 1.3rem;
-            letter-spacing: 0.08em;
-            border-radius: 10px;
-            text-decoration: none;
-            border: none;
-            cursor: pointer;
-            transition: all 0.2s;
-            position: relative;
-            overflow: hidden;
+            display: flex; align-items: center; justify-content: center; gap: 0.6rem;
+            width: 100%; padding: 0.9rem;
+            background: var(--green); color: #000;
+            font-family: 'Bebas Neue', sans-serif; font-size: 1.3rem;
+            letter-spacing: 0.08em; border-radius: 10px;
+            text-decoration: none; border: none; cursor: pointer;
+            transition: all 0.2s; position: relative; overflow: hidden;
         }
 
         .main-dl::before {
             content: '';
-            position: absolute;
-            inset: 0;
+            position: absolute; inset: 0;
             background: linear-gradient(180deg, rgba(255,255,255,0.15) 0%, transparent 100%);
         }
 
-        .main-dl:hover {
+        .main-dl:hover:not(:disabled) {
             background: #00ff88;
             box-shadow: 0 8px 32px rgba(0,232,122,0.3);
             transform: translateY(-1px);
         }
 
-        .hint {
-            text-align: center;
-            font-size: 0.72rem;
-            color: var(--muted);
-            margin-top: 0.75rem;
-        }
+        .main-dl:disabled { opacity: 0.6; cursor: not-allowed; }
+
+        .hint { text-align: center; font-size: 0.72rem; color: var(--muted); margin-top: 0.75rem; }
 
         .retry-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            background: rgba(255,32,32,0.1);
-            border: 1px solid rgba(255,32,32,0.25);
-            color: var(--red);
-            border-radius: 8px;
-            padding: 0.6rem 1.2rem;
-            font-family: 'DM Sans', sans-serif;
-            font-size: 0.88rem;
-            cursor: pointer;
-            transition: all 0.15s;
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            background: rgba(255,32,32,0.1); border: 1px solid rgba(255,32,32,0.25);
+            color: var(--red); border-radius: 8px; padding: 0.6rem 1.2rem;
+            font-family: 'DM Sans', sans-serif; font-size: 0.88rem;
+            cursor: pointer; transition: all 0.15s;
         }
         .retry-btn:hover { background: rgba(255,32,32,0.18); }
 
-        /* FOOTER */
         .footer {
-            margin-top: 2rem;
-            display: flex;
-            justify-content: center;
-            gap: 1.5rem;
-            flex-wrap: wrap;
-            opacity: 0;
-            animation: fadeIn 0.5s ease 0.6s forwards;
+            margin-top: 2rem; display: flex; justify-content: center;
+            gap: 1.5rem; flex-wrap: wrap;
+            opacity: 0; animation: fadeIn 0.5s ease 0.6s forwards;
         }
 
-        .footer-chip {
-            display: flex;
-            align-items: center;
-            gap: 0.4rem;
-            font-size: 0.72rem;
-            color: var(--muted);
-        }
+        .footer-chip { display: flex; align-items: center; gap: 0.4rem; font-size: 0.72rem; color: var(--muted); }
+        .dot { width: 5px; height: 5px; background: var(--red); border-radius: 50%; }
 
-        .dot {
-            width: 5px; height: 5px;
-            background: var(--red);
-            border-radius: 50%;
-        }
-
-        /* ANIMATIONS */
-        @keyframes slideDown {
-            from { opacity: 0; transform: translateY(-20px); }
-            to   { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(16px); }
-            to   { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to   { opacity: 1; }
-        }
+        @keyframes slideDown { from { opacity:0; transform:translateY(-20px); } to { opacity:1; transform:translateY(0); } }
+        @keyframes slideUp   { from { opacity:0; transform:translateY(16px);  } to { opacity:1; transform:translateY(0); } }
+        @keyframes fadeIn    { from { opacity:0; } to { opacity:1; } }
 
         @media (max-width: 400px) {
             .quality-row { flex-direction: column; }
@@ -479,17 +364,14 @@
 <body>
 <div class="wrapper">
 
-    <!-- HEADER -->
     <div class="header">
         <span class="logo-tag">&#9654; Downloader</span>
         <div class="logo-main">RED<span>GIFS</span> DL</div>
         <div class="tagline">Sem marca d'água &nbsp;·&nbsp; HD direto do CDN &nbsp;·&nbsp; 100% grátis</div>
     </div>
 
-    <!-- CARD -->
     <div class="card">
         <div class="scan"></div>
-
         <div class="input-group">
             <svg class="input-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
             <input id="urlInput" class="url-input" type="text" placeholder="Cole o link do Redgifs aqui..." autocomplete="off" spellcheck="false">
@@ -497,23 +379,19 @@
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
             </button>
         </div>
-
         <button class="dl-btn" id="dlBtn" onclick="baixarHD()">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
             BAIXAR EM HD
         </button>
     </div>
 
-    <!-- RESULT -->
     <div id="resultado"></div>
 
-    <!-- FOOTER -->
     <div class="footer">
         <div class="footer-chip"><span class="dot"></span> Sem cadastro</div>
         <div class="footer-chip"><span class="dot"></span> Funciona no browser</div>
         <div class="footer-chip"><span class="dot"></span> 3 proxies de fallback</div>
     </div>
-
 </div>
 
 <script>
@@ -537,9 +415,67 @@
         throw new Error('Todos os proxies falharam');
     }
 
-    const inputEl  = document.getElementById('urlInput');
-    const clearBtn = document.getElementById('clearBtn');
-    const dlBtn    = document.getElementById('dlBtn');
+    // Força download via blob — evita o navegador só "abrir" o vídeo
+    async function forcarDownload(url, nomeArquivo, btnEl) {
+        try {
+            btnEl.disabled = true;
+            btnEl.innerHTML = `<span class="spin"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M21 12a9 9 0 1 1-6.22-8.56"/></svg></span> Baixando...`;
+
+            // Mostra barra de progresso
+            const progressWrap = document.getElementById('progressWrap');
+            const progressBar  = document.getElementById('progressBar');
+            const progressTxt  = document.getElementById('progressTxt');
+            if (progressWrap) progressWrap.style.display = 'block';
+
+            const response = await fetch(url);
+            if (!response.ok) throw new Error('Falha no fetch do vídeo');
+
+            const contentLength = response.headers.get('Content-Length');
+            const total = contentLength ? parseInt(contentLength) : null;
+            const reader = response.body.getReader();
+            const chunks = [];
+            let loaded = 0;
+
+            while (true) {
+                const { done, value } = await reader.read();
+                if (done) break;
+                chunks.push(value);
+                loaded += value.length;
+                if (total && progressBar) {
+                    const pct = Math.round((loaded / total) * 100);
+                    progressBar.style.width = pct + '%';
+                    if (progressTxt) progressTxt.textContent = `${pct}% — ${(loaded/1024/1024).toFixed(1)} MB`;
+                } else if (progressTxt) {
+                    progressTxt.textContent = `${(loaded/1024/1024).toFixed(1)} MB baixados...`;
+                }
+            }
+
+            const blob = new Blob(chunks, { type: 'video/mp4' });
+            const blobUrl = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = blobUrl;
+            a.download = nomeArquivo;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            setTimeout(() => URL.revokeObjectURL(blobUrl), 5000);
+
+            btnEl.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> BAIXADO!`;
+            btnEl.style.background = '#00b35a';
+            if (progressTxt) progressTxt.textContent = 'Download completo ✓';
+
+        } catch (err) {
+            // Se o fetch do vídeo falhar (CORS), abre direto em nova aba como fallback
+            btnEl.disabled = false;
+            btnEl.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> BAIXAR HD AGORA`;
+            // Fallback: abre em nova aba
+            window.open(url, '_blank');
+        }
+    }
+
+    const inputEl   = document.getElementById('urlInput');
+    const clearBtn  = document.getElementById('clearBtn');
+    const dlBtn     = document.getElementById('dlBtn');
     const resultado = document.getElementById('resultado');
 
     inputEl.addEventListener('input', () => {
@@ -554,40 +490,4 @@
         inputEl.focus();
     }
 
-    const ICON_DL = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>`;
-    const ICON_SPIN = `<span class="spin"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M21 12a9 9 0 1 1-6.22-8.56"/></svg></span>`;
-
-    function setLoading(on) {
-        dlBtn.disabled = on;
-        dlBtn.innerHTML = on ? `${ICON_SPIN} Buscando...` : `${ICON_DL} BAIXAR EM HD`;
-    }
-
-    function copiar(url, btn) {
-        navigator.clipboard.writeText(url).then(() => {
-            btn.textContent = '✓ Copiado';
-            btn.classList.add('copied');
-            setTimeout(() => { btn.textContent = 'Copiar'; btn.classList.remove('copied'); }, 2000);
-        });
-    }
-
-    function pulse(el) {
-        el.style.borderColor = 'rgba(255,32,32,0.6)';
-        el.style.boxShadow = '0 0 0 3px rgba(255,32,32,0.12)';
-        setTimeout(() => { el.style.borderColor = ''; el.style.boxShadow = ''; }, 600);
-    }
-
-    async function baixarHD() {
-        const raw = inputEl.value.trim();
-        if (!raw) { pulse(inputEl.closest('.input-group')); return; }
-
-        let id = raw.split('/').pop().split('?')[0].split('#')[0].replace(/\.[^/.]+$/, '');
-        if (!id) return;
-
-        setLoading(true);
-
-        resultado.innerHTML = `
-            <div class="result-card" style="text-align:center; padding:2rem 1.5rem;">
-                <div class="spin" style="display:inline-block; color:var(--red); margin-bottom:0.75rem;">
-                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12a9 9 0 1 1-6.22-8.56"/></svg>
-                </div>
-                <p style="color:var(--muted); font-size:0.
+    const ICO

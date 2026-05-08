@@ -3,124 +3,591 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Redgifs HD Direct • Sem Marca d'Água</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <title>RGDL — Redgifs Downloader</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
-        body { font-family: 'Inter', sans-serif; }
-        .glass { background: rgba(255,255,255,0.08); backdrop-filter: blur(12px); }
-        .neon-red { text-shadow: 0 0 15px #e50914; }
+        :root {
+            --red: #ff2020;
+            --bg: #0a0a0a;
+            --surface: #111111;
+            --surface2: #1a1a1a;
+            --border: rgba(255,255,255,0.07);
+            --text: #f0f0f0;
+            --muted: #555;
+            --green: #00e87a;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 1rem;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background:
+                radial-gradient(ellipse 80% 50% at 50% -10%, rgba(255,32,32,0.12) 0%, transparent 70%),
+                radial-gradient(ellipse 40% 30% at 80% 100%, rgba(255,32,32,0.06) 0%, transparent 60%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.4;
+        }
+
+        .wrapper {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 560px;
+        }
+
+        /* HEADER */
+        .header {
+            margin-bottom: 3rem;
+            opacity: 0;
+            animation: slideDown 0.7s cubic-bezier(0.16,1,0.3,1) 0.1s forwards;
+        }
+
+        .logo-tag {
+            display: inline-block;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.65rem;
+            font-weight: 500;
+            letter-spacing: 0.25em;
+            color: var(--red);
+            text-transform: uppercase;
+            border: 1px solid rgba(255,32,32,0.3);
+            padding: 3px 8px;
+            border-radius: 4px;
+            margin-bottom: 0.5rem;
+        }
+
+        .logo-main {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(3.5rem, 12vw, 6rem);
+            letter-spacing: 0.02em;
+            line-height: 1;
+            color: var(--text);
+        }
+
+        .logo-main span {
+            color: var(--red);
+            position: relative;
+        }
+
+        .logo-main span::after {
+            content: '';
+            position: absolute;
+            bottom: 4px;
+            left: 0; right: 0;
+            height: 3px;
+            background: var(--red);
+            border-radius: 2px;
+            filter: blur(1px);
+            opacity: 0.6;
+        }
+
+        .tagline {
+            font-size: 0.82rem;
+            color: var(--muted);
+            letter-spacing: 0.04em;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 0.75rem;
+        }
+
+        .tagline::before, .tagline::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--border);
+        }
+
+        /* CARD */
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 1.5rem;
+            opacity: 0;
+            animation: slideUp 0.7s cubic-bezier(0.16,1,0.3,1) 0.25s forwards;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255,32,32,0.4), transparent);
+        }
+
+        @keyframes scanline {
+            0%   { top: 0; opacity: 0; }
+            10%  { opacity: 0.35; }
+            90%  { opacity: 0.35; }
+            100% { top: 100%; opacity: 0; }
+        }
+
+        .card .scan {
+            position: absolute;
+            left: 0; right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255,32,32,0.5), transparent);
+            pointer-events: none;
+            animation: scanline 3.5s ease-in-out infinite;
+            animation-delay: 1.2s;
+        }
+
+        /* INPUT GROUP */
+        .input-group {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 0 1rem;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            margin-bottom: 0.75rem;
+        }
+
+        .input-group:focus-within {
+            border-color: rgba(255,32,32,0.4);
+            box-shadow: 0 0 0 3px rgba(255,32,32,0.07), inset 0 0 20px rgba(255,32,32,0.03);
+        }
+
+        .input-icon { color: var(--muted); font-size: 0.85rem; flex-shrink: 0; }
+
+        .url-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            outline: none;
+            color: var(--text);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.95rem;
+            padding: 1rem 0;
+        }
+
+        .url-input::placeholder { color: var(--muted); }
+
+        .clear-btn {
+            background: none;
+            border: none;
+            color: var(--muted);
+            cursor: pointer;
+            padding: 4px;
+            display: none;
+            transition: color 0.15s;
+        }
+        .clear-btn:hover { color: var(--text); }
+        .clear-btn.visible { display: block; }
+
+        /* DOWNLOAD BUTTON */
+        .dl-btn {
+            width: 100%;
+            background: var(--red);
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            padding: 1rem;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.4rem;
+            letter-spacing: 0.08em;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.6rem;
+            transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dl-btn::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(255,255,255,0.1) 0%, transparent 100%);
+            pointer-events: none;
+        }
+
+        .dl-btn:hover:not(:disabled) {
+            background: #e01010;
+            box-shadow: 0 8px 32px rgba(255,32,32,0.35);
+            transform: translateY(-1px);
+        }
+
+        .dl-btn:active:not(:disabled) { transform: translateY(1px); }
+        .dl-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .spin { animation: spin 0.8s linear infinite; display: inline-block; }
+
+        /* RESULT */
+        #resultado { margin-top: 1rem; }
+
+        .result-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 1.5rem;
+            animation: slideUp 0.5s cubic-bezier(0.16,1,0.3,1) forwards;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .result-card.success::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(0,232,122,0.5), transparent);
+        }
+
+        .result-card.error::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255,32,32,0.5), transparent);
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.72rem;
+            font-weight: 500;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            padding: 4px 10px;
+            border-radius: 6px;
+            margin-bottom: 1.25rem;
+        }
+
+        .badge.success {
+            background: rgba(0,232,122,0.1);
+            color: var(--green);
+            border: 1px solid rgba(0,232,122,0.2);
+        }
+
+        .badge.error {
+            background: rgba(255,32,32,0.1);
+            color: var(--red);
+            border: 1px solid rgba(255,32,32,0.2);
+        }
+
+        .link-box {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 0.75rem 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .link-url {
+            flex: 1;
+            font-size: 0.72rem;
+            color: var(--green);
+            font-family: 'Courier New', monospace;
+            word-break: break-all;
+            line-height: 1.5;
+            opacity: 0.85;
+        }
+
+        .copy-btn {
+            background: none;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--muted);
+            cursor: pointer;
+            padding: 5px 10px;
+            font-size: 0.78rem;
+            font-family: 'DM Sans', sans-serif;
+            transition: all 0.15s;
+            flex-shrink: 0;
+            white-space: nowrap;
+        }
+        .copy-btn:hover { color: var(--text); border-color: rgba(255,255,255,0.2); }
+        .copy-btn.copied { color: var(--green); border-color: rgba(0,232,122,0.3); }
+
+        .quality-row {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .q-btn {
+            flex: 1;
+            padding: 0.6rem;
+            border-radius: 8px;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1rem;
+            letter-spacing: 0.05em;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            border: 1px solid;
+            transition: all 0.15s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.3rem;
+        }
+
+        .q-btn.hd  { background: rgba(0,232,122,0.08);   color: var(--green);  border-color: rgba(0,232,122,0.25); }
+        .q-btn.hd:hover  { background: rgba(0,232,122,0.15);  box-shadow: 0 4px 16px rgba(0,232,122,0.12); }
+        .q-btn.sd  { background: rgba(100,160,255,0.08); color: #6aaeff;       border-color: rgba(100,160,255,0.25); }
+        .q-btn.sd:hover  { background: rgba(100,160,255,0.15); }
+        .q-btn.gif { background: rgba(200,120,255,0.08); color: #c87aff;       border-color: rgba(200,120,255,0.25); }
+        .q-btn.gif:hover { background: rgba(200,120,255,0.15); }
+
+        .divider { height: 1px; background: var(--border); margin: 0.75rem 0; }
+
+        .main-dl {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.6rem;
+            width: 100%;
+            padding: 0.9rem;
+            background: var(--green);
+            color: #000;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.3rem;
+            letter-spacing: 0.08em;
+            border-radius: 10px;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .main-dl::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(255,255,255,0.15) 0%, transparent 100%);
+        }
+
+        .main-dl:hover {
+            background: #00ff88;
+            box-shadow: 0 8px 32px rgba(0,232,122,0.3);
+            transform: translateY(-1px);
+        }
+
+        .hint {
+            text-align: center;
+            font-size: 0.72rem;
+            color: var(--muted);
+            margin-top: 0.75rem;
+        }
+
+        .retry-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255,32,32,0.1);
+            border: 1px solid rgba(255,32,32,0.25);
+            color: var(--red);
+            border-radius: 8px;
+            padding: 0.6rem 1.2rem;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.88rem;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .retry-btn:hover { background: rgba(255,32,32,0.18); }
+
+        /* FOOTER */
+        .footer {
+            margin-top: 2rem;
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            opacity: 0;
+            animation: fadeIn 0.5s ease 0.6s forwards;
+        }
+
+        .footer-chip {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.72rem;
+            color: var(--muted);
+        }
+
+        .dot {
+            width: 5px; height: 5px;
+            background: var(--red);
+            border-radius: 50%;
+        }
+
+        /* ANIMATIONS */
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(16px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+
+        @media (max-width: 400px) {
+            .quality-row { flex-direction: column; }
+            .footer { gap: 0.75rem; }
+        }
     </style>
 </head>
-<body class="bg-gradient-to-br from-zinc-950 via-purple-950 to-black text-white min-h-screen flex items-center justify-center p-6">
+<body>
+<div class="wrapper">
 
-    <div class="max-w-2xl w-full mx-auto">
-        <div class="text-center mb-10">
-            <div class="inline-flex items-center gap-3 bg-white/10 px-6 py-3 rounded-3xl mb-6">
-                <i class="fa-solid fa-fire text-red-500 text-3xl"></i>
-                <h1 class="text-5xl font-semibold tracking-tighter neon-red">Redgifs HD Direct</h1>
-            </div>
-            <p class="text-zinc-400 text-xl">Sem marca d'água • Qualidade máxima • Funciona no GitHub Pages</p>
-        </div>
-
-        <div class="glass border border-white/10 rounded-3xl p-2 shadow-2xl">
-            <div class="flex gap-3 items-center bg-zinc-900 rounded-3xl px-6 py-4">
-                <i class="fa-solid fa-link text-zinc-400"></i>
-                <input 
-                    id="urlInput"
-                    type="text"
-                    placeholder="Cole o link do Redgifs aqui..."
-                    class="flex-1 bg-transparent outline-none text-lg placeholder-zinc-500"
-                >
-            </div>
-        </div>
-
-        <button onclick="baixarHD()" 
-                class="mt-6 w-full bg-red-600 hover:bg-red-700 transition-all active:scale-95 font-semibold text-xl py-6 rounded-3xl flex items-center justify-center gap-3 shadow-xl">
-            <i class="fa-solid fa-download"></i>
-            BAIXAR EM HD AGORA
-        </button>
-
-        <div id="resultado" class="mt-10"></div>
-
-        <div class="text-center text-zinc-500 text-sm mt-12">
-            100% grátis • Proxy ativado contra CORS • Sem cadastro
-        </div>
+    <!-- HEADER -->
+    <div class="header">
+        <span class="logo-tag">&#9654; Downloader</span>
+        <div class="logo-main">RED<span>GIFS</span> DL</div>
+        <div class="tagline">Sem marca d'água &nbsp;·&nbsp; HD direto do CDN &nbsp;·&nbsp; 100% grátis</div>
     </div>
 
-    <script>
-        const CORS_PROXY = "https://corsproxy.io/?";
+    <!-- CARD -->
+    <div class="card">
+        <div class="scan"></div>
 
-        async function fetchWithProxy(url, options = {}) {
-            const proxiedUrl = CORS_PROXY + encodeURIComponent(url);
-            return fetch(proxiedUrl, options);
-        }
+        <div class="input-group">
+            <svg class="input-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+            <input id="urlInput" class="url-input" type="text" placeholder="Cole o link do Redgifs aqui..." autocomplete="off" spellcheck="false">
+            <button id="clearBtn" class="clear-btn" onclick="limpar()">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+        </div>
 
-        async function baixarHD() {
-            const input = document.getElementById('urlInput').value.trim();
-            const resultado = document.getElementById('resultado');
-            
-            if (!input) {
-                resultado.innerHTML = `<div class="text-red-400 text-center py-8 text-lg">❌ Cole um link válido do Redgifs!</div>`;
-                return;
-            }
+        <button class="dl-btn" id="dlBtn" onclick="baixarHD()">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            BAIXAR EM HD
+        </button>
+    </div>
 
-            resultado.innerHTML = `
-                <div class="glass border border-white/10 rounded-3xl p-8 text-center">
-                    <i class="fa-solid fa-spinner fa-spin text-4xl text-red-500 mx-auto mb-4"></i>
-                    <p class="text-zinc-400">Buscando link HD real (via proxy)...</p>
-                </div>`;
+    <!-- RESULT -->
+    <div id="resultado"></div>
 
-            let id = input.split('/').pop().split('?')[0];
+    <!-- FOOTER -->
+    <div class="footer">
+        <div class="footer-chip"><span class="dot"></span> Sem cadastro</div>
+        <div class="footer-chip"><span class="dot"></span> Funciona no browser</div>
+        <div class="footer-chip"><span class="dot"></span> 3 proxies de fallback</div>
+    </div>
 
+</div>
+
+<script>
+    const PROXIES = [
+        url => `https://corsproxy.io/?${encodeURIComponent(url)}`,
+        url => `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
+        url => `https://thingproxy.freeboard.io/fetch/${url}`,
+    ];
+
+    async function fetchComProxy(url, options = {}) {
+        try {
+            const res = await fetch(url, { ...options, signal: AbortSignal.timeout(5000) });
+            if (res.ok) return res;
+        } catch (_) {}
+        for (const proxy of PROXIES) {
             try {
-                // 1. Token temporário
-                const tokenRes = await fetchWithProxy('https://api.redgifs.com/v2/auth/temporary', { method: 'POST' });
-                const tokenData = await tokenRes.json();
-                const token = tokenData.token;
-
-                // 2. Busca o vídeo
-                const gifRes = await fetchWithProxy(`https://api.redgifs.com/v2/gifs/${id}`, {
-                    headers: { 'Authorization': `Bearer ${token}` }
-                });
-
-                const data = await gifRes.json();
-                const hdUrl = data.gif?.urls?.hd;
-
-                if (hdUrl) {
-                    resultado.innerHTML = `
-                        <div class="glass border border-white/10 rounded-3xl p-8">
-                            <div class="flex items-center gap-3 text-emerald-400 mb-6">
-                                <i class="fa-solid fa-circle-check text-2xl"></i>
-                                <h2 class="font-semibold text-2xl">✅ Link HD encontrado!</h2>
-                            </div>
-                            <a href="${hdUrl}" target="_blank" 
-                               class="block bg-zinc-900 hover:bg-zinc-800 p-5 rounded-2xl text-emerald-300 break-all font-mono text-sm mb-6 transition-all">
-                                ${hdUrl}
-                            </a>
-                            <button onclick="window.open('${hdUrl}', '_blank')" 
-                                    class="w-full bg-emerald-500 hover:bg-emerald-600 text-black font-bold py-6 rounded-3xl text-xl flex items-center justify-center gap-3 transition-all active:scale-95">
-                                <i class="fa-solid fa-download"></i>
-                                BAIXAR VÍDEO HD AGORA
-                            </button>
-                            <p class="text-center text-zinc-500 text-xs mt-6">Link direto do CDN • Sem marca d'água</p>
-                        </div>`;
-                } else {
-                    resultado.innerHTML = `<p class="text-red-400 text-center py-8">❌ Não encontrou link HD nesse vídeo.</p>`;
-                }
-            } catch (e) {
-                resultado.innerHTML = `
-                    <div class="glass border border-red-500/30 text-red-400 rounded-3xl p-8 text-center">
-                        <p class="mb-4">❌ Proxy temporariamente sobrecarregado.<br>Tente novamente em alguns segundos.</p>
-                        <button onclick="baixarHD()" class="px-8 py-4 bg-red-600 hover:bg-red-700 rounded-2xl font-medium">🔄 Tentar Novamente</button>
-                    </div>`;
-            }
+                const res = await fetch(proxy(url), { ...options, signal: AbortSignal.timeout(8000) });
+                if (res.ok) return res;
+            } catch (_) {}
         }
+        throw new Error('Todos os proxies falharam');
+    }
 
-        document.getElementById('urlInput').addEventListener('keypress', e => {
-            if (e.key === 'Enter') baixarHD();
+    const inputEl  = document.getElementById('urlInput');
+    const clearBtn = document.getElementById('clearBtn');
+    const dlBtn    = document.getElementById('dlBtn');
+    const resultado = document.getElementById('resultado');
+
+    inputEl.addEventListener('input', () => {
+        clearBtn.classList.toggle('visible', inputEl.value.length > 0);
+    });
+    inputEl.addEventListener('keypress', e => { if (e.key === 'Enter') baixarHD(); });
+
+    function limpar() {
+        inputEl.value = '';
+        clearBtn.classList.remove('visible');
+        resultado.innerHTML = '';
+        inputEl.focus();
+    }
+
+    const ICON_DL = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>`;
+    const ICON_SPIN = `<span class="spin"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M21 12a9 9 0 1 1-6.22-8.56"/></svg></span>`;
+
+    function setLoading(on) {
+        dlBtn.disabled = on;
+        dlBtn.innerHTML = on ? `${ICON_SPIN} Buscando...` : `${ICON_DL} BAIXAR EM HD`;
+    }
+
+    function copiar(url, btn) {
+        navigator.clipboard.writeText(url).then(() => {
+            btn.textContent = '✓ Copiado';
+            btn.classList.add('copied');
+            setTimeout(() => { btn.textContent = 'Copiar'; btn.classList.remove('copied'); }, 2000);
         });
-    </script>
-</body>
-</html>
+    }
+
+    function pulse(el) {
+        el.style.borderColor = 'rgba(255,32,32,0.6)';
+        el.style.boxShadow = '0 0 0 3px rgba(255,32,32,0.12)';
+        setTimeout(() => { el.style.borderColor = ''; el.style.boxShadow = ''; }, 600);
+    }
+
+    async function baixarHD() {
+        const raw = inputEl.value.trim();
+        if (!raw) { pulse(inputEl.closest('.input-group')); return; }
+
+        let id = raw.split('/').pop().split('?')[0].split('#')[0].replace(/\.[^/.]+$/, '');
+        if (!id) return;
+
+        setLoading(true);
+
+        resultado.innerHTML = `
+            <div class="result-card" style="text-align:center; padding:2rem 1.5rem;">
+                <div class="spin" style="display:inline-block; color:var(--red); margin-bottom:0.75rem;">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12a9 9 0 1 1-6.22-8.56"/></svg>
+                </div>
+                <p style="color:var(--muted); font-size:0.

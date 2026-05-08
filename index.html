@@ -16,16 +16,14 @@
 <body class="bg-gradient-to-br from-zinc-950 via-purple-950 to-black text-white min-h-screen flex items-center justify-center p-6">
 
     <div class="max-w-2xl w-full mx-auto">
-        <!-- Header -->
         <div class="text-center mb-10">
             <div class="inline-flex items-center gap-3 bg-white/10 px-6 py-3 rounded-3xl mb-6">
                 <i class="fa-solid fa-fire text-red-500 text-3xl"></i>
                 <h1 class="text-5xl font-semibold tracking-tighter neon-red">Redgifs HD Direct</h1>
             </div>
-            <p class="text-zinc-400 text-xl">Sem marca d'água • Qualidade máxima • Direto do CDN</p>
+            <p class="text-zinc-400 text-xl">Sem marca d'água • Qualidade máxima • Funciona no GitHub Pages</p>
         </div>
 
-        <!-- Input -->
         <div class="glass border border-white/10 rounded-3xl p-2 shadow-2xl">
             <div class="flex gap-3 items-center bg-zinc-900 rounded-3xl px-6 py-4">
                 <i class="fa-solid fa-link text-zinc-400"></i>
@@ -44,41 +42,46 @@
             BAIXAR EM HD AGORA
         </button>
 
-        <!-- Resultado -->
         <div id="resultado" class="mt-10"></div>
 
         <div class="text-center text-zinc-500 text-sm mt-12">
-            100% grátis • Funciona direto no navegador • Sem cadastro
+            100% grátis • Proxy ativado contra CORS • Sem cadastro
         </div>
     </div>
 
     <script>
+        const CORS_PROXY = "https://corsproxy.io/?";
+
+        async function fetchWithProxy(url, options = {}) {
+            const proxiedUrl = CORS_PROXY + encodeURIComponent(url);
+            return fetch(proxiedUrl, options);
+        }
+
         async function baixarHD() {
             const input = document.getElementById('urlInput').value.trim();
             const resultado = document.getElementById('resultado');
             
             if (!input) {
-                resultado.innerHTML = `
-                    <div class="text-red-400 text-center py-8 text-lg">
-                        ❌ Cole um link válido do Redgifs!
-                    </div>`;
+                resultado.innerHTML = `<div class="text-red-400 text-center py-8 text-lg">❌ Cole um link válido do Redgifs!</div>`;
                 return;
             }
 
             resultado.innerHTML = `
                 <div class="glass border border-white/10 rounded-3xl p-8 text-center">
                     <i class="fa-solid fa-spinner fa-spin text-4xl text-red-500 mx-auto mb-4"></i>
-                    <p class="text-zinc-400">Buscando link HD real...</p>
+                    <p class="text-zinc-400">Buscando link HD real (via proxy)...</p>
                 </div>`;
 
             let id = input.split('/').pop().split('?')[0];
 
             try {
-                const tokenRes = await fetch('https://api.redgifs.com/v2/auth/temporary', { method: 'POST' });
+                // 1. Token temporário
+                const tokenRes = await fetchWithProxy('https://api.redgifs.com/v2/auth/temporary', { method: 'POST' });
                 const tokenData = await tokenRes.json();
                 const token = tokenData.token;
 
-                const gifRes = await fetch(`https://api.redgifs.com/v2/gifs/${id}`, {
+                // 2. Busca o vídeo
+                const gifRes = await fetchWithProxy(`https://api.redgifs.com/v2/gifs/${id}`, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
 
@@ -101,7 +104,7 @@
                                 <i class="fa-solid fa-download"></i>
                                 BAIXAR VÍDEO HD AGORA
                             </button>
-                            <p class="text-center text-zinc-500 text-xs mt-6">Link direto • Sem marca d'água • Qualidade máxima</p>
+                            <p class="text-center text-zinc-500 text-xs mt-6">Link direto do CDN • Sem marca d'água</p>
                         </div>`;
                 } else {
                     resultado.innerHTML = `<p class="text-red-400 text-center py-8">❌ Não encontrou link HD nesse vídeo.</p>`;
@@ -109,16 +112,12 @@
             } catch (e) {
                 resultado.innerHTML = `
                     <div class="glass border border-red-500/30 text-red-400 rounded-3xl p-8 text-center">
-                        <p class="mb-4">❌ Erro temporário (CORS)</p>
-                        <button onclick="baixarHD()" 
-                                class="px-8 py-4 bg-red-600 hover:bg-red-700 rounded-2xl font-medium">
-                            🔄 Tentar Novamente
-                        </button>
+                        <p class="mb-4">❌ Proxy temporariamente sobrecarregado.<br>Tente novamente em alguns segundos.</p>
+                        <button onclick="baixarHD()" class="px-8 py-4 bg-red-600 hover:bg-red-700 rounded-2xl font-medium">🔄 Tentar Novamente</button>
                     </div>`;
             }
         }
 
-        // Enter para buscar
         document.getElementById('urlInput').addEventListener('keypress', e => {
             if (e.key === 'Enter') baixarHD();
         });

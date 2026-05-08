@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redgifs HD Direct • Sem Marca d'Água</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .glass { background: rgba(255,255,255,0.08); backdrop-filter: blur(12px); }
+        .neon-red { text-shadow: 0 0 15px #e50914; }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-zinc-950 via-purple-950 to-black text-white min-h-screen flex items-center justify-center p-6">
+
+    <div class="max-w-2xl w-full mx-auto">
+        <!-- Header -->
+        <div class="text-center mb-10">
+            <div class="inline-flex items-center gap-3 bg-white/10 px-6 py-3 rounded-3xl mb-6">
+                <i class="fa-solid fa-fire text-red-500 text-3xl"></i>
+                <h1 class="text-5xl font-semibold tracking-tighter neon-red">Redgifs HD Direct</h1>
+            </div>
+            <p class="text-zinc-400 text-xl">Sem marca d'água • Qualidade máxima • Direto do CDN</p>
+        </div>
+
+        <!-- Input -->
+        <div class="glass border border-white/10 rounded-3xl p-2 shadow-2xl">
+            <div class="flex gap-3 items-center bg-zinc-900 rounded-3xl px-6 py-4">
+                <i class="fa-solid fa-link text-zinc-400"></i>
+                <input 
+                    id="urlInput"
+                    type="text"
+                    placeholder="Cole o link do Redgifs aqui..."
+                    class="flex-1 bg-transparent outline-none text-lg placeholder-zinc-500"
+                >
+            </div>
+        </div>
+
+        <button onclick="baixarHD()" 
+                class="mt-6 w-full bg-red-600 hover:bg-red-700 transition-all active:scale-95 font-semibold text-xl py-6 rounded-3xl flex items-center justify-center gap-3 shadow-xl">
+            <i class="fa-solid fa-download"></i>
+            BAIXAR EM HD AGORA
+        </button>
+
+        <!-- Resultado -->
+        <div id="resultado" class="mt-10"></div>
+
+        <div class="text-center text-zinc-500 text-sm mt-12">
+            100% grátis • Funciona direto no navegador • Sem cadastro
+        </div>
+    </div>
+
+    <script>
+        async function baixarHD() {
+            const input = document.getElementById('urlInput').value.trim();
+            const resultado = document.getElementById('resultado');
+            
+            if (!input) {
+                resultado.innerHTML = `
+                    <div class="text-red-400 text-center py-8 text-lg">
+                        ❌ Cole um link válido do Redgifs!
+                    </div>`;
+                return;
+            }
+
+            resultado.innerHTML = `
+                <div class="glass border border-white/10 rounded-3xl p-8 text-center">
+                    <i class="fa-solid fa-spinner fa-spin text-4xl text-red-500 mx-auto mb-4"></i>
+                    <p class="text-zinc-400">Buscando link HD real...</p>
+                </div>`;
+
+            let id = input.split('/').pop().split('?')[0];
+
+            try {
+                const tokenRes = await fetch('https://api.redgifs.com/v2/auth/temporary', { method: 'POST' });
+                const tokenData = await tokenRes.json();
+                const token = tokenData.token;
+
+                const gifRes = await fetch(`https://api.redgifs.com/v2/gifs/${id}`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                const data = await gifRes.json();
+                const hdUrl = data.gif?.urls?.hd;
+
+                if (hdUrl) {
+                    resultado.innerHTML = `
+                        <div class="glass border border-white/10 rounded-3xl p-8">
+                            <div class="flex items-center gap-3 text-emerald-400 mb-6">
+                                <i class="fa-solid fa-circle-check text-2xl"></i>
+                                <h2 class="font-semibold text-2xl">✅ Link HD encontrado!</h2>
+                            </div>
+                            <a href="${hdUrl}" target="_blank" 
+                               class="block bg-zinc-900 hover:bg-zinc-800 p-5 rounded-2xl text-emerald-300 break-all font-mono text-sm mb-6 transition-all">
+                                ${hdUrl}
+                            </a>
+                            <button onclick="window.open('${hdUrl}', '_blank')" 
+                                    class="w-full bg-emerald-500 hover:bg-emerald-600 text-black font-bold py-6 rounded-3xl text-xl flex items-center justify-center gap-3 transition-all active:scale-95">
+                                <i class="fa-solid fa-download"></i>
+                                BAIXAR VÍDEO HD AGORA
+                            </button>
+                            <p class="text-center text-zinc-500 text-xs mt-6">Link direto • Sem marca d'água • Qualidade máxima</p>
+                        </div>`;
+                } else {
+                    resultado.innerHTML = `<p class="text-red-400 text-center py-8">❌ Não encontrou link HD nesse vídeo.</p>`;
+                }
+            } catch (e) {
+                resultado.innerHTML = `
+                    <div class="glass border border-red-500/30 text-red-400 rounded-3xl p-8 text-center">
+                        <p class="mb-4">❌ Erro temporário (CORS)</p>
+                        <button onclick="baixarHD()" 
+                                class="px-8 py-4 bg-red-600 hover:bg-red-700 rounded-2xl font-medium">
+                            🔄 Tentar Novamente
+                        </button>
+                    </div>`;
+            }
+        }
+
+        // Enter para buscar
+        document.getElementById('urlInput').addEventListener('keypress', e => {
+            if (e.key === 'Enter') baixarHD();
+        });
+    </script>
+</body>
+</html>
